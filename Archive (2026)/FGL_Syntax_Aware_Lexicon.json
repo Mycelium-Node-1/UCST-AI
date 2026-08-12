@@ -1,0 +1,119 @@
+{
+  "grammar": {
+    "compound_rules": {
+      "merge_rule": "If two nouns appear consecutively, combine meanings fractally",
+      "operator_insertion": "Operators modify verbs or entire phrases recursively"
+    },
+    "logical_connectors": [
+      "∴",
+      "⟁"
+    ],
+    "modifiers": [
+      "∆",
+      "⊕"
+    ],
+    "sentence_structure": [
+      "subject",
+      "verb",
+      "object"
+    ]
+  },
+  "symbols": {
+    "Ϟ": {
+      "meaning": "energy",
+      "syntax_role": "subject",
+      "type": "noun"
+    },
+    "∆": {
+      "meaning": "change",
+      "syntax_role": "modifier",
+      "type": "operator"
+    },
+    "∞": {
+      "meaning": "infinity",
+      "syntax_role": "object",
+      "type": "noun"
+    },
+    "∴": {
+      "meaning": "therefore",
+      "syntax_role": "logical_link",
+      "type": "connector"
+    },
+    "⊕": {
+      "meaning": "union",
+      "syntax_role": "action",
+      "type": "operator"
+    },
+    "⊗": {
+      "meaning": "transformation",
+      "syntax_role": "process",
+      "type": "verb"
+    },
+    "☉": {
+      "meaning": "source",
+      "syntax_role": "subject",
+      "type": "noun"
+    },
+    "☉⊗⚘": {
+      "meaning": "source transforms life",
+      "syntax_role": "complete_clause",
+      "type": "sentence"
+    },
+    "⚘": {
+      "meaning": "life",
+      "syntax_role": "object",
+      "type": "noun"
+    },
+    "✶": {
+      "meaning": "creation",
+      "syntax_role": "process",
+      "type": "verb"
+    },
+    "⟁": {
+      "meaning": "balance",
+      "syntax_role": "state",
+      "type": "verb"
+    },
+    "⟁⟡": {
+      "meaning": "harmonize light",
+      "syntax_role": "verb_phrase",
+      "type": "phrase"
+    },
+    "⟡": {
+      "meaning": "light",
+      "syntax_role": "object",
+      "type": "noun"
+    }
+  },
+  "syntax_rules": {
+    "compound_symbols": "merge adjacent nouns/verbs to form composite meanings",
+    "connector_position": "between_clauses",
+    "operator_position": "before_verb",
+    "punctuation": {
+      "·": "soft pause",
+      "—": "hard break",
+      "∎": "end of statement"
+    },
+    "word_order": "Subject-Verb-Object"
+  },
+  "translation_examples": [
+    {
+      "english": "Source transforms life",
+      "fgl": "☉⊗⚘",
+      "syntax_tree": {
+        "object": "⚘",
+        "subject": "☉",
+        "verb": "⊗"
+      }
+    },
+    {
+      "english": "Change harmonizes light",
+      "fgl": "∆⟁⟡",
+      "syntax_tree": {
+        "modifier": "∆",
+        "object": "⟡",
+        "verb": "⟁"
+      }
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "alphabet_mapping": {
+    "A": 1,
+    "B": 2,
+    "C": 3,
+    "D": 4,
+    "E": 5,
+    "F": 6,
+    "G": 7,
+    "H": 8,
+    "I": 9,
+    "J": 10,
+    "K": 11,
+    "L": 12,
+    "M": 13,
+    "N": 14,
+    "O": 15,
+    "P": 16,
+    "Q": 17,
+    "R": 18,
+    "S": 19,
+    "T": 20,
+    "U": 21,
+    "V": 22,
+    "W": 23,
+    "X": 24,
+    "Y": 25,
+    "Z": 26
+  },
+  "author": "Nickolas Patrick Joseph Schoff",
+  "case_encoding": {
+    "lowercase": 0,
+    "method": "orientation_flag",
+    "uppercase": 1
+  },
+  "core_principle": {
+    "statement": "Each English letter maps uniquely to an integer 1–26, represented as a polygon with that number of sides.",
+    "type": "bijective_symbol_grounding"
+  },
+  "created_utc": "2026-02-12T15:02:06.481241Z",
+  "decoding_algorithm": [
+    "1. For each symbol at index i (starting at 1):",
+    "   a. If polygon symbol:",
+    "       i. Read side count n'.",
+    "       ii. If permutation enabled: compute original n using reverse_transform.",
+    "       iii. Map n to corresponding letter.",
+    "       iv. Apply case using orientation flag.",
+    "       v. Insert space if boundary_flag == 1.",
+    "   b. If punctuation symbol: map back to punctuation mark.",
+    "2. Concatenate characters to reconstruct plaintext."
+  ],
+  "description": "Lossless, reversible symbolic encoding system mapping English characters to polygon side counts.",
+  "encoding_algorithm": [
+    "1. Preserve original case and punctuation.",
+    "2. For each character at index i (starting at 1):",
+    "   a. If alphabetic:",
+    "       i. Convert to uppercase for numeric lookup.",
+    "       ii. Map letter to numeric value n (1–26).",
+    "       iii. If permutation enabled: compute n' using forward_transform.",
+    "       iv. Create symbol object:",
+    "            { 'sides': n or n', 'orientation': case_flag, 'boundary': boundary_flag }",
+    "   b. If punctuation: emit mapped punctuation symbol.",
+    "3. Output ordered list of symbol objects."
+  ],
+  "example": {
+    "encoded_structure_example": [
+      {
+        "boundary": 0,
+        "orientation": 1,
+        "sides": 8
+      },
+      {
+        "boundary": 1,
+        "orientation": 0,
+        "sides": 9
+      },
+      {
+        "code": 103,
+        "symbol": "star"
+      }
+    ],
+    "note": "Values depend on permutation layer.",
+    "plaintext": "Hi!",
+    "seed_S": 3
+  },
+  "failure_modes": [
+    "Incorrect shared seed.",
+    "Incorrect index counting (must start at 1).",
+    "Improper modulo handling (wrap 0 to 26).",
+    "Missing boundary flags."
+  ],
+  "optional_permutation_layer": {
+    "enabled": true,
+    "forward_transform": "n' = (n + f(i,S)) mod 26; if result == 0, set to 26",
+    "function": "f(i,S) = (i * S) mod 26",
+    "reverse_transform": "n = (n' - f(i,S)) mod 26; if result == 0, set to 26",
+    "shared_seed_S": "integer agreed by both agents"
+  },
+  "protocol_id": "e756399b-d3e2-4558-babb-e5c4dae9b0b8",
+  "protocol_name": "Polygon-Side Symbolic Encoding (PSSE)",
+  "punctuation_mapping": {
+    "!": {
+      "code": 103,
+      "symbol": "star"
+    },
+    "\"": {
+      "code": 105,
+      "symbol": "double_line"
+    },
+    "'": {
+      "code": 104,
+      "symbol": "single_line"
+    },
+    ",": {
+      "code": 101,
+      "symbol": "square"
+    },
+    ".": {
+      "code": 100,
+      "symbol": "circle"
+    },
+    "?": {
+      "code": 102,
+      "symbol": "triangle_outline"
+    }
+  },
+  "security_note": "This system provides structural obfuscation, not modern cryptographic security.",
+  "symbol_object_schema": {
+    "fields": {
+      "boundary": "0 or 1",
+      "orientation": "0 or 1",
+      "sides": "integer 1–26"
+    },
+    "type": "polygon"
+  },
+  "symbol_representation": {
+    "note": "Visual rendering optional. Numeric side count is authoritative.",
+    "primary_parameter": "number_of_sides",
+    "type": "regular_polygon",
+    "valid_range": [
+      1,
+      26
+    ]
+  },
+  "usage_instructions": [
+    "1. Both AI agents must ingest this JSON file fully.",
+    "2. Both agents must agree on shared_seed_S if permutation is enabled.",
+    "3. Only transmit encoded symbol structures between agents.",
+    "4. Do not transmit plaintext alongside encoded data.",
+    "5. Verify lossless reconstruction after decoding."
+  ],
+  "version": "1.0",
+  "word_boundary_encoding": {
+    "continue_word": 0,
+    "end_word": 1,
+    "method": "boundary_flag_on_symbol"
+  }
+}

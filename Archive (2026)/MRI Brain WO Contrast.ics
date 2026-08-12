@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Epic Systems Corporation//MyChart//EN
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:WP-24COMQDaAQ6rpamSDnRztFog-3D-3D-24MLJJgBUHDnDqh8m8fQecoNWvKlhgWu3v8y0TzBEyBHU-3D@portal.mydh.org
+ORGANIZER;CN=myDH:mailto:myDH-noreply@hitchcock.org
+DTSTAMP:20250926T223132Z
+DTSTART:20251003T190000Z
+DTEND:20251003T201000Z
+SUMMARY;LANGUAGE=en-US:MRI Brain WO Contrast
+LOCATION;LANGUAGE=en-US:2300 Southwood Dr\, Nashua NH 03063-1818
+DESCRIPTION;LANGUAGE=en-US:Appointment Time: 3:30 PM EDT\nArrival Location: Nashua Registration\nPhone: 603-577-4070\n\n\nAs a reminder\, no children are able to accompany you to your appointment..\n
+END:VEVENT
+END:VCALENDAR
