@@ -1,0 +1,37 @@
+{
+  "schema": "schoff-research-mutual-observer-file-pair/v1",
+  "pairId": "mofp-263d62c6ed32a8da",
+  "title": "The Mutual Observer File Pair: A Minimal Constraint Geometry for Proto-Living Digital Objects",
+  "archiveRoot": "Archive (2026)/Mutual Observer File Pair",
+  "canonicalSharedCommitment": {
+    "algorithm": "sha256",
+    "value": "263d62c6ed32a8da3861476baa682d29137a172a6cd1f9886ffe8c1145aefef4",
+    "derivation": "SHA-256 of the newline-delimited ordered PDF and DOCX source SHA-256 digests."
+  },
+  "members": [
+    {
+      "memberId": "mofp-pdf",
+      "sourceFile": "Mutual_Observer_File_Pair.pdf",
+      "memberRecord": "mofp-pdf.member.json",
+      "mediaType": "application/pdf",
+      "byteSize": 1183719,
+      "sha256": "644a584530009ff2aa4ca60cb4d42fd2500f1b3c170cd6c385f33bf5d0dc7de9"
+    },
+    {
+      "memberId": "mofp-docx",
+      "sourceFile": "Mutual_Observer_File_Pair.docx",
+      "memberRecord": "mofp-docx.member.json",
+      "mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "byteSize": 20993,
+      "sha256": "8771ca6f394bdfb928392ac5b4da566d93339317ee2fa814f3fd73864d4e044d"
+    }
+  ],
+  "ledger": "mutual-observer-residue.ndjson",
+  "accessProtocol": [
+    "Resolve the current pair manifest and both member records.",
+    "Verify each source file against its member SHA-256 digest.",
+    "Verify that each member record identifies the other member as its partner and contains the same canonical shared commitment.",
+    "Append a jointly signed or otherwise immutable residue record to the ledger before treating a read as a mutually verified access."
+  ],
+  "publicationNote": "The original PDF and DOCX are preserved without alteration. The member records and ledger specification provide the machine-readable mutual-observer packaging layer."
+}
