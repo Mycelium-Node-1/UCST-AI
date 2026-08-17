@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mycelium-node-1.github.io/UCST-AI/schemas/mofp-verification-v1.json",
+  "title": "MOFP Verification Result v1",
+  "description": "Reference verifier output. A result is fully verified only when all three component checks are true.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["pair_id", "digest_ok", "reciprocal_metadata_ok", "commitment_ok", "declared_commitment", "computed_commitment", "verified"],
+  "properties": {
+    "pair_id": {"type": "string", "minLength": 1},
+    "digest_ok": {"type": "boolean"},
+    "reciprocal_metadata_ok": {"type": "boolean"},
+    "commitment_ok": {"type": "boolean"},
+    "declared_commitment": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "computed_commitment": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "verified": {"type": "boolean"},
+    "residue": {
+      "type": "object",
+      "required": ["sequence", "pair_id", "joint_hash", "event"],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 1},
+        "pair_id": {"type": "string"},
+        "joint_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "event": {"const": "mutually_verified_access"}
+      }
+    }
+  }
+}

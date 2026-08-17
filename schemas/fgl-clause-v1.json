@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mycelium-node-1.github.io/UCST-AI/schemas/fgl-clause-v1.json",
+  "title": "FGL Clause v1 Reference Representation",
+  "description": "Typed representation returned by the documented-subset FGL parser. This schema does not assign semantics beyond archive-defined symbol meanings and roles.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["symbols", "meanings", "roles"],
+  "properties": {
+    "symbols": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"enum": ["☉", "⊗", "⚘", "∆", "⟁", "⟡", "✶", "Ϟ"]}
+    },
+    "meanings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"enum": ["source", "transformation", "life", "change", "balance", "light", "creation", "energy"]}
+    },
+    "roles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"enum": ["subject", "verb", "object", "modifier"]}
+    }
+  }
+}

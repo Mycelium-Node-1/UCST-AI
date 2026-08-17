@@ -1,0 +1,10 @@
+[
+  {"type": "polygon", "sides": 11, "orientation": 1, "boundary": 0},
+  {"type": "polygon", "sides": 15, "orientation": 0, "boundary": 0},
+  {"type": "punctuation", "symbol": "square", "code": 101, "boundary": 1},
+  {"type": "polygon", "sides": 24, "orientation": 0, "boundary": 0},
+  {"type": "polygon", "sides": 24, "orientation": 0, "boundary": 0},
+  {"type": "polygon", "sides": 24, "orientation": 0, "boundary": 0},
+  {"type": "polygon", "sides": 26, "orientation": 0, "boundary": 0},
+  {"type": "punctuation", "symbol": "star", "code": 103, "boundary": 0}
+]

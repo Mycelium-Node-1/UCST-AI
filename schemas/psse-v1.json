@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mycelium-node-1.github.io/UCST-AI/schemas/psse-v1.json",
+  "title": "PSSE v1 Reference Stream",
+  "description": "Reference schema for the documented Polygon-Side Symbolic Encoding subset implemented by Schoff Constraint Laboratory Milestone 1.",
+  "type": "array",
+  "items": {
+    "oneOf": [
+      {
+        "title": "Polygon symbol",
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "sides", "orientation", "boundary"],
+        "properties": {
+          "type": {"const": "polygon"},
+          "sides": {"type": "integer", "minimum": 1, "maximum": 26},
+          "orientation": {"type": "integer", "enum": [0, 1]},
+          "boundary": {"type": "integer", "enum": [0, 1]}
+        }
+      },
+      {
+        "title": "Punctuation symbol",
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "symbol", "code", "boundary"],
+        "properties": {
+          "type": {"const": "punctuation"},
+          "symbol": {"enum": ["circle", "square", "triangle_outline", "star", "single_line", "double_line"]},
+          "code": {"type": "integer", "minimum": 100, "maximum": 105},
+          "boundary": {"type": "integer", "enum": [0, 1]}
+        }
+      }
+    ]
+  }
+}

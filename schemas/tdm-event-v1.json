@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mycelium-node-1.github.io/UCST-AI/schemas/tdm-event-v1.json",
+  "title": "TDM Event v1 Reference Representation",
+  "description": "One event in the software simulation of the documented three-phase TDM heartbeat.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tick", "phase", "payload"],
+  "properties": {
+    "tick": {"type": "integer", "minimum": 0},
+    "phase": {"enum": ["ANCHOR", "INSERT", "EXPAND"]},
+    "payload": {"type": "object"}
+  }
+}
