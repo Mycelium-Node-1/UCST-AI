@@ -10,6 +10,8 @@ from .core import (
     tdm_cycle,
     verify_mofp,
 )
+from .scene_ir import compile_fgl_to_ir
+from .sdf import render_ascii, sample_scene, validate_scene
 
 __all__ = [
     "FGLClause",
@@ -20,4 +22,8 @@ __all__ = [
     "psse_encode",
     "tdm_cycle",
     "verify_mofp",
+    "compile_fgl_to_ir",
+    "render_ascii",
+    "sample_scene",
+    "validate_scene",
 ]

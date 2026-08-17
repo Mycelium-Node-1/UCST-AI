@@ -1,0 +1,94 @@
+{
+  "constraints": [
+    {
+      "detail": "Subject ☉ maps to source-anchor.",
+      "name": "subject_present",
+      "passed": true
+    },
+    {
+      "detail": "Object ⚘ maps to life-node.",
+      "name": "object_present",
+      "passed": true
+    },
+    {
+      "detail": "Primitive identifiers must be unique within a scene.",
+      "name": "unique_primitive_ids",
+      "passed": true
+    },
+    {
+      "detail": "Reference sphere radii must be positive.",
+      "name": "positive_radius",
+      "passed": true
+    }
+  ],
+  "provenance": {
+    "compiler": "schoff-lab-m2-reference",
+    "mapping_policy": "Milestone 2 documented-subset reference mapping; inspectable research visualization only."
+  },
+  "scene": {
+    "composition": "union",
+    "dimension": 3,
+    "primitives": [
+      {
+        "id": "source-anchor",
+        "kind": "sphere",
+        "parameters": {
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "radius": 1.0
+        },
+        "source_symbol": "☉"
+      },
+      {
+        "id": "life-node",
+        "kind": "sphere",
+        "parameters": {
+          "center": [
+            1.4,
+            0.0,
+            0.0
+          ],
+          "radius": 0.65
+        },
+        "source_symbol": "⚘"
+      }
+    ],
+    "relations": [
+      {
+        "from": "source-anchor",
+        "kind": "transform",
+        "source_symbol": "⊗",
+        "to": "life-node"
+      }
+    ]
+  },
+  "schema": "schoff.fgl-ir/v1",
+  "semantics": [
+    {
+      "meaning": "source",
+      "role": "subject",
+      "symbol": "☉"
+    },
+    {
+      "meaning": "transformation",
+      "role": "verb",
+      "symbol": "⊗"
+    },
+    {
+      "meaning": "life",
+      "role": "object",
+      "symbol": "⚘"
+    }
+  ],
+  "source": {
+    "symbols": [
+      "☉",
+      "⊗",
+      "⚘"
+    ],
+    "text": "☉⊗⚘∎"
+  }
+}

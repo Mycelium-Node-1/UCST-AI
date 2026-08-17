@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mycelium-node-1.github.io/UCST-AI/schemas/fgl-ir-v1.json",
+  "title": "FGL Intermediate Representation v1",
+  "description": "Versioned reference output for Milestone 2 FGL parsing and declarative SDF scene compilation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "source", "semantics", "scene", "constraints", "provenance"],
+  "properties": {
+    "schema": {"const": "schoff.fgl-ir/v1"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "symbols"],
+      "properties": {
+        "text": {"type": "string", "minLength": 1},
+        "symbols": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
+    "semantics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["symbol", "meaning", "role"],
+        "properties": {
+          "symbol": {"type": "string"},
+          "meaning": {"type": "string"},
+          "role": {"type": "string"}
+        }
+      }
+    },
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dimension", "composition", "primitives", "relations"],
+      "properties": {
+        "dimension": {"const": 3},
+        "composition": {"const": "union"},
+        "primitives": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/primitive"}
+        },
+        "relations": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/relation"}
+        }
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "passed", "detail"],
+        "properties": {
+          "name": {"type": "string"},
+          "passed": {"type": "boolean"},
+          "detail": {"type": "string"}
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compiler", "mapping_policy"],
+      "properties": {
+        "compiler": {"const": "schoff-lab-m2-reference"},
+        "mapping_policy": {"type": "string"}
+      }
+    }
+  },
+  "$defs": {
+    "vector3": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"type": "number"}
+    },
+    "primitive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "source_symbol", "parameters"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["sphere", "box", "plane"]},
+        "source_symbol": {"type": "string", "minLength": 1},
+        "parameters": {"type": "object"}
+      }
+    },
+    "relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "from", "to", "source_symbol"],
+      "properties": {
+        "kind": {"enum": ["transform", "balance", "create"]},
+        "from": {"type": "string"},
+        "to": {"type": "string"},
+        "source_symbol": {"type": "string"}
+      }
+    }
+  }
+}
