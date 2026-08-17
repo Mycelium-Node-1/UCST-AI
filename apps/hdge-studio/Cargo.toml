@@ -1,0 +1,13 @@
+[package]
+name = "hdge-studio"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "A native declarative SDF world authoring and validation workbench."
+
+[dependencies]
+eframe.workspace = true
+hdge-core = { path = "../../crates/hdge-core" }
+hdge-schema = { path = "../../crates/hdge-schema" }
+serde_json.workspace = true

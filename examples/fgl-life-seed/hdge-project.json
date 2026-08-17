@@ -1,0 +1,9 @@
+{
+  "schema": "hdge.project/v1",
+  "project_id": "fgl-life-seed",
+  "display_name": "FGL Life Seed",
+  "source": "source.fgl",
+  "execution_profile": "engineering",
+  "initial_scene_id": "life-seed",
+  "description": "A documented FGL subset fixture for the first HDGE Studio vertical slice."
+}

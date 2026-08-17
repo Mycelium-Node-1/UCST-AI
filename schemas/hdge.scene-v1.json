@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mycelium-node-1.github.io/UCST-AI/schemas/hdge.scene-v1.json",
+  "title": "HDGE Scene v1",
+  "description": "Backend-neutral declarative SDF scene contract for HDGE Studio.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "scene_id", "revision", "composition", "primitives", "camera", "provenance"],
+  "properties": {
+    "schema": {"const": "hdge.scene/v1"},
+    "scene_id": {"type": "string", "minLength": 1},
+    "revision": {"type": "integer", "minimum": 1},
+    "composition": {"enum": ["union", "intersection", "subtraction", "smooth_union"]},
+    "primitives": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/primitive"}},
+    "camera": {"$ref": "#/$defs/camera"},
+    "provenance": {"$ref": "#/$defs/provenance"}
+  },
+  "$defs": {
+    "vec3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "z"],
+      "properties": {"x": {"type": "number"}, "y": {"type": "number"}, "z": {"type": "number"}}
+    },
+    "primitive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "center"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["sphere", "box", "plane"]},
+        "source_symbol": {"type": "string"},
+        "center": {"$ref": "#/$defs/vec3"},
+        "radius": {"type": "number", "exclusiveMinimum": 0},
+        "half_extents": {"$ref": "#/$defs/vec3"}
+      }
+    },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["position", "target", "vertical_fov_degrees"],
+      "properties": {
+        "position": {"$ref": "#/$defs/vec3"},
+        "target": {"$ref": "#/$defs/vec3"},
+        "vertical_fov_degrees": {"type": "number", "exclusiveMinimum": 1, "exclusiveMaximum": 179}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compiler", "mapping_policy", "source_digest"],
+      "properties": {
+        "compiler": {"type": "string"},
+        "mapping_policy": {"type": "string"},
+        "source_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    }
+  }
+}

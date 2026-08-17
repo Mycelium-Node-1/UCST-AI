@@ -1,0 +1,13 @@
+[package]
+name = "hdge-schema"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Canonical contracts and digest utilities for HDGE Studio."
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true

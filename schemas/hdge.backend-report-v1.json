@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mycelium-node-1.github.io/UCST-AI/schemas/hdge.backend-report-v1.json",
+  "title": "HDGE Backend Report v1",
+  "description": "Reproducibility metadata for one HDGE backend execution.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "scene_digest", "renderer", "renderer_revision", "mode", "probe_count", "summary"],
+  "properties": {
+    "schema": {"const": "hdge.backend-report/v1"},
+    "scene_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "renderer": {"type": "string", "minLength": 1},
+    "renderer_revision": {"type": "string", "minLength": 1},
+    "mode": {"type": "string", "minLength": 1},
+    "probe_count": {"type": "integer", "minimum": 0},
+    "summary": {"type": "string"}
+  }
+}

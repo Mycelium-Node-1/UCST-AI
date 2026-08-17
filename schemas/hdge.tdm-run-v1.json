@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mycelium-node-1.github.io/UCST-AI/schemas/hdge.tdm-run-v1.json",
+  "title": "HDGE TDM Run v1",
+  "description": "Auditable ANCHOR, INSERT, and EXPAND software transaction record.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "run_id", "base_scene_digest", "candidate_scene_digest", "accepted", "validation", "events"],
+  "properties": {
+    "schema": {"const": "hdge.tdm-run/v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "base_scene_digest": {"type": "string", "minLength": 1},
+    "candidate_scene_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "accepted": {"type": "boolean"},
+    "validation": {"type": "array", "items": {"$ref": "#/$defs/check"}},
+    "events": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/event"}}
+  },
+  "$defs": {
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "passed", "detail"],
+      "properties": {"name": {"type": "string"}, "passed": {"type": "boolean"}, "detail": {"type": "string"}}
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tick", "phase", "detail"],
+      "properties": {
+        "tick": {"type": "integer", "minimum": 0},
+        "phase": {"enum": ["ANCHOR", "INSERT", "EXPAND"]},
+        "detail": {"type": "string"}
+      }
+    }
+  }
+}
