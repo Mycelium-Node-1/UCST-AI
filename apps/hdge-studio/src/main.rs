@@ -3,6 +3,7 @@ use hdge_core::{compile_fgl, execute_tdm, sample_scene, Compilation};
 use hdge_schema::{canonical_json, PrimitiveKind, TdmRun, Vec3};
 
 mod sphere_world_lab;
+mod sphere_world_shader;
 use sphere_world_lab::SphereWorldLab;
 
 const SAMPLE_SOURCE: &str = "☉⊗∆⚘∎";
@@ -51,6 +52,22 @@ impl Default for StudioApp {
 }
 
 impl StudioApp {
+    fn new(creation_context: &eframe::CreationContext<'_>) -> Self {
+        let mut app = Self {
+            source: SAMPLE_SOURCE.into(),
+            scene_id: "life-seed".into(),
+            compilation: None,
+            tdm_run: None,
+            scene_json: String::new(),
+            error: None,
+            selected_debug: DebugView::World,
+            selected_workspace: Workspace::Fgl,
+            sphere_world_lab: SphereWorldLab::new(creation_context.gl.clone()),
+        };
+        app.compile_and_run();
+        app
+    }
+
     fn compile_and_run(&mut self) {
         match compile_fgl(&self.source, &self.scene_id) {
             Ok(compilation) => {
@@ -351,6 +368,7 @@ impl eframe::App for StudioApp {
 
 fn main() -> Result<(), eframe::Error> {
     let options = eframe::NativeOptions {
+        renderer: eframe::Renderer::Glow,
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([1280.0, 760.0])
             .with_min_inner_size([900.0, 620.0]),
@@ -359,6 +377,6 @@ fn main() -> Result<(), eframe::Error> {
     eframe::run_native(
         "HDGE Studio",
         options,
-        Box::new(|_creation_context| Box::<StudioApp>::default()),
+        Box::new(|creation_context| Box::new(StudioApp::new(creation_context))),
     )
 }

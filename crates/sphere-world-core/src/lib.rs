@@ -73,6 +73,19 @@ pub struct WorldDiagnostics {
     pub active_patch_count: usize,
 }
 
+/// A derived, reproducible location of a canonical radial sample in the
+/// cube-sphere patch hierarchy. This is tracing evidence, not stored world state.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SurfaceTrace {
+    pub direction: Vec3,
+    pub patch_id: PatchId,
+    pub local_u: f64,
+    pub local_v: f64,
+    pub radial_height_m: f64,
+    pub position: Vec3,
+    pub walkable: bool,
+}
+
 pub fn face_basis(face: CubeFace) -> FaceBasis {
     match face {
         CubeFace::PosX => FaceBasis {
@@ -198,6 +211,79 @@ fn patch_uv(patch_id: PatchId, local_u: f64, local_v: f64) -> (f64, f64) {
 pub fn direction_for_patch(patch_id: PatchId, local_u: f64, local_v: f64) -> Vec3 {
     let (u, v) = patch_uv(patch_id, local_u, local_v);
     cube_sphere_direction(patch_id.face, u, v)
+}
+
+/// Deterministically locate a canonical direction on one cube face. Edge ties
+/// resolve in enum order, making repeated traces stable even at face boundaries.
+pub fn locate_direction(direction: Vec3) -> (CubeFace, f64, f64) {
+    let unit = direction.normalized();
+    let ax = unit.x.abs();
+    let ay = unit.y.abs();
+    let az = unit.z.abs();
+    let (face, a, b) = if ax >= ay && ax >= az {
+        if unit.x >= 0.0 {
+            (CubeFace::PosX, -unit.z / unit.x, unit.y / unit.x)
+        } else {
+            (CubeFace::NegX, unit.z / -unit.x, unit.y / -unit.x)
+        }
+    } else if ay >= az {
+        if unit.y >= 0.0 {
+            (CubeFace::PosY, unit.x / unit.y, -unit.z / unit.y)
+        } else {
+            (CubeFace::NegY, unit.x / -unit.y, unit.z / -unit.y)
+        }
+    } else if unit.z >= 0.0 {
+        (CubeFace::PosZ, unit.x / unit.z, unit.y / unit.z)
+    } else {
+        (CubeFace::NegZ, unit.x / unit.z, unit.y / -unit.z)
+    };
+    (
+        face,
+        ((a + 1.0) * 0.5).clamp(0.0, 1.0),
+        ((b + 1.0) * 0.5).clamp(0.0, 1.0),
+    )
+}
+
+/// Trace a radial sample through the declarative world, selecting a stable
+/// quadtree slice at `target_level` and evaluating the complete terrain/boundary pipeline.
+pub fn trace_surface(
+    world: &SphereWorld,
+    direction: Vec3,
+    target_level: u8,
+) -> Result<SurfaceTrace, WorldError> {
+    validate_or_error(world)?;
+    if target_level > world.topology.max_level
+        || target_level >= 31
+        || direction.length() <= f64::EPSILON
+    {
+        return Err(WorldError::InvalidWorld);
+    }
+    let unit = direction.normalized();
+    let (face, u, v) = locate_direction(unit);
+    let width = 1_u32 << target_level;
+    let scaled_u = u * width as f64;
+    let scaled_v = v * width as f64;
+    let x = scaled_u.floor().min((width - 1) as f64) as u32;
+    let y = scaled_v.floor().min((width - 1) as f64) as u32;
+    let local_u = (scaled_u - x as f64).clamp(0.0, 1.0);
+    let local_v = (scaled_v - y as f64).clamp(0.0, 1.0);
+    let patch_id = PatchId {
+        face,
+        level: target_level,
+        x,
+        y,
+    };
+    let canonical_direction = direction_for_patch(patch_id, local_u, local_v);
+    let radial_height_m = radial_height(world, canonical_direction);
+    Ok(SurfaceTrace {
+        direction: canonical_direction,
+        patch_id,
+        local_u,
+        local_v,
+        radial_height_m,
+        position: surface_position(world, canonical_direction),
+        walkable: is_walkable(world, canonical_direction),
+    })
 }
 
 fn noise(direction: Vec3, seed: u64, frequency: f64) -> f64 {

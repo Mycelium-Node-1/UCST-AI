@@ -1039,6 +1039,7 @@ name = "hdge-studio"
 version = "0.1.0"
 dependencies = [
  "eframe",
+ "egui_glow",
  "hdge-core",
  "hdge-schema",
  "serde_json",

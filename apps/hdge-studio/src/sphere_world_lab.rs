@@ -1,3 +1,4 @@
+use crate::sphere_world_shader::{ShaderUniforms, SphereWorldShader};
 use eframe::egui::{self, Color32, Pos2, RichText, Stroke};
 use sphere_world_core::{
     compile_patch, cube_sphere_direction, diagnostics, observer_frame, split_patch,
@@ -23,10 +24,28 @@ pub struct SphereWorldLab {
     yaw: f32,
     pitch: f32,
     zoom: f32,
+    shader: Option<SphereWorldShader>,
+    shader_error: Option<String>,
 }
 
 impl Default for SphereWorldLab {
     fn default() -> Self {
+        Self::new(None)
+    }
+}
+
+impl SphereWorldLab {
+    pub fn new(gl: Option<std::sync::Arc<egui_glow::glow::Context>>) -> Self {
+        let (shader, shader_error) = match gl {
+            Some(context) => match SphereWorldShader::new(context) {
+                Ok(shader) => (Some(shader), None),
+                Err(error) => (None, Some(error)),
+            },
+            None => (
+                None,
+                Some("Glow renderer unavailable; using CPU reference fallback.".into()),
+            ),
+        };
         let mut lab = Self {
             world: sample_world(),
             selected_patch: PatchId::root(CubeFace::PosZ),
@@ -41,13 +60,12 @@ impl Default for SphereWorldLab {
             yaw: 0.0,
             pitch: 0.18,
             zoom: 1.0,
+            shader,
+            shader_error,
         };
         lab.rebuild();
         lab
     }
-}
-
-impl SphereWorldLab {
     pub fn ui(&mut self, ctx: &egui::Context) {
         let mut changed = false;
         egui::SidePanel::left("sphereworld-controls")
@@ -198,6 +216,14 @@ impl SphereWorldLab {
                 if let Some(error) = &self.error {
                     ui.colored_label(Color32::from_rgb(255, 131, 131), error);
                 }
+                if let Some(shader_error) = &self.shader_error {
+                    ui.colored_label(Color32::from_rgb(255, 191, 118), shader_error);
+                } else {
+                    ui.colored_label(
+                        Color32::from_rgb(122, 226, 165),
+                        "GPU shader: real-time Glow boundary/skirt visualization",
+                    );
+                }
                 if let Some(diagnostics) = &self.diagnostics {
                     ui.label(format!(
                         "World digest: {}…",
@@ -334,20 +360,38 @@ impl SphereWorldLab {
             }
         }
 
+        let boundary = boundary_latitude(&self.world) as f32;
+        let shader_active = if let Some(shader) = &self.shader {
+            shader.update(ShaderUniforms {
+                boundary_latitude_degrees: boundary,
+                seam_skirts_enabled: self.world.lod.use_edge_skirts,
+                split_enabled: self.show_split,
+                yaw: self.yaw,
+                pitch: self.pitch,
+                zoom: self.zoom,
+            });
+            shader.paint(ui, rect);
+            true
+        } else {
+            false
+        };
+
         let painter = ui.painter_at(rect);
-        painter.rect_filled(rect, 10.0, Color32::from_rgb(9, 16, 27));
+        if !shader_active {
+            painter.rect_filled(rect, 10.0, Color32::from_rgb(9, 16, 27));
+            let center = rect.center();
+            let radius = rect.width().min(rect.height()) * 0.38 * self.zoom;
+            painter.circle_filled(center, radius, Color32::from_rgb(15, 37, 58));
+            painter.circle_stroke(
+                center,
+                radius,
+                Stroke::new(2.0_f32, Color32::from_rgb(91, 145, 191)),
+            );
+        }
         painter.rect_stroke(
             rect,
             10.0,
             Stroke::new(1.0_f32, Color32::from_rgb(48, 72, 102)),
-        );
-        let center = rect.center();
-        let radius = rect.width().min(rect.height()) * 0.38 * self.zoom;
-        painter.circle_filled(center, radius, Color32::from_rgb(15, 37, 58));
-        painter.circle_stroke(
-            center,
-            radius,
-            Stroke::new(2.0_f32, Color32::from_rgb(91, 145, 191)),
         );
 
         if let Some(mesh) = &self.root_mesh {

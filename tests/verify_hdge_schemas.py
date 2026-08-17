@@ -2,9 +2,11 @@
 """Validate HDGE Studio's JSON Schema documents and checked fixtures."""
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 
+from jsonschema import ValidationError
 from jsonschema.validators import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,5 +26,22 @@ sphere_schema = json.loads((ROOT / "schemas" / "sphere-world-v1.json").read_text
 sphere_fixture = json.loads(
     (ROOT / "examples" / "sphere-world-basic" / "world.sphereworld.json").read_text(encoding="utf-8")
 )
-Draft202012Validator(sphere_schema).validate(sphere_fixture)
+validator = Draft202012Validator(sphere_schema)
+validator.validate(sphere_fixture)
 print("valid fixture: examples/sphere-world-basic/world.sphereworld.json")
+
+negative_cases = {
+    "non_positive_radius": lambda candidate: candidate.update(radius_m=0),
+    "unsupported_topology": lambda candidate: candidate["topology"].update(kind="icosphere"),
+    "out_of_range_anchor_coordinate": lambda candidate: candidate["anchors"][0].update(u=1.1),
+    "undeclared_manifest_property": lambda candidate: candidate.update(baked_mesh="not canonical world state"),
+}
+for name, mutate in negative_cases.items():
+    candidate = copy.deepcopy(sphere_fixture)
+    mutate(candidate)
+    try:
+        validator.validate(candidate)
+    except ValidationError:
+        print(f"rejected invalid fixture: {name}")
+    else:
+        raise AssertionError(f"invalid SphereWorld fixture was accepted: {name}")

@@ -34,7 +34,9 @@ The **Load checked fixture** button restores the versioned `examples/sphere-worl
 
 ## What the viewport shows
 
-The viewport is an explicit CPU reference visualization rather than a finished realtime renderer. It renders front-facing samples of the selected `pos_z` cube-sphere patch. Cyan samples are walkable terrain, coral samples belong to the blocked boundary, the gold point is the active observer anchor, and the amber square is the structure footprint. Wireframe display is optional. Turning on the split overlays four derived child patches.
+The viewport combines a CPU reference overlay with a small realtime **Glow shader** visualization. The CPU path remains the semantic authority: it generates the selected `pos_z` patch, terrain samples, walkability classification, seam-skirt mesh policy, observer point, structure footprint, and the evidence panel. Cyan CPU samples are walkable terrain, coral CPU samples belong to the blocked boundary, the gold point is the active observer anchor, and the amber square is the structure footprint. Wireframe display is optional. Turning on the split overlays four derived child patches.
+
+The shader ray-casts a presentation sphere and colors the declared polar boundary cyan/coral. When seam skirts are enabled, its amber overlay follows the selected `pos_z` cube-patch edge; when split mode is enabled, it also draws the bounded child-patch crosshair. Shader values are uniforms projected from canonical manifest fields and UI state. They do not write geometry, affect validation, replace CPU terrain evaluation, or establish a second world representation. If GPU initialization fails, the workbench continues with the CPU reference viewport and displays a non-fatal notice.
 
 The evidence panel reports the canonical world digest, active patch count, selected-mesh metrics, patch digest, manifest validation checks, observation frame, and structure-footprint metrics. The collapsible text panel shows the current canonical manifest JSON.
 
@@ -47,8 +49,8 @@ cargo check --workspace
 python3 tests/verify_hdge_schemas.py
 ```
 
-The desktop package includes a test that deserializes the checked SphereWorld fixture and confirms it passes the manifest validator. The SphereWorld core suite separately checks root generation, shared-edge directions, terrain reproducibility, surface frames, mesh/wireframe output, and one patch split.
+The desktop package includes a test that deserializes the checked SphereWorld fixture and confirms it passes the manifest validator, plus shader-source checks for the boundary and seam-skirt uniforms. The expanded SphereWorld core suite checks manifest acceptance, root-face direction round trips, patch slicing, shared-edge continuity, deterministic terrain, boundary classification, mesh topology with and without skirts, anchor orthonormality, structure transforms, root/child compilation, trace selection, and fail-closed invalid inputs. Schema verification also confirms that invalid radius, unsupported topology, out-of-range anchors, and undeclared manifest properties are rejected.
 
 ## Current boundaries
 
-SphereWorld Lab does not yet provide freeform file selection, persistent save-as, full 3D rendering, general mesh import, character controls, physics gameplay, GPU tessellation, or MM3E backend rendering. It is a tested manipulation and inspection workbench for the canonical sphere-world model. The next safe feature is project-file open/save and a proper 3D mesh viewport with explicit patch-neighbor selection; it should retain the same manifest-to-derived-artifact boundary.
+SphereWorld Lab does not yet provide freeform file selection, persistent save-as, a full mesh renderer, general mesh import, character controls, physics gameplay, GPU tessellation, or MM3E backend rendering. Its Glow layer is intentionally a diagnostic visualization, not a competing renderer or an authority over the canonical manifest. It is a tested manipulation and inspection workbench for the canonical sphere-world model. The next safe feature is project-file open/save and a proper 3D mesh viewport with explicit patch-neighbor selection; it should retain the same manifest-to-derived-artifact boundary.

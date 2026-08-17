@@ -8,6 +8,7 @@ description = "A native declarative SDF world authoring and validation workbench
 
 [dependencies]
 eframe.workspace = true
+egui_glow = "0.26.2"
 hdge-core = { path = "../../crates/hdge-core" }
 hdge-schema = { path = "../../crates/hdge-schema" }
 sphere-world-core = { path = "../../crates/sphere-world-core" }
