@@ -1,0 +1,16 @@
+[package]
+name = "sphere-world-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Deterministic cube-sphere world derivation for HDGE Studio."
+
+[dependencies]
+sphere-world-schema = { path = "../sphere-world-schema" }
+serde.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true

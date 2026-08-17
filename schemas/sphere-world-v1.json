@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mycelium-node-1.github.io/UCST-AI/schemas/sphere-world-v1.json",
+  "title": "SphereWorld v1",
+  "description": "Canonical declarative source for a cube-sphere procedural world.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "world_id", "seed", "radius_m", "topology", "lod", "layers", "anchors", "structures", "derived_outputs"],
+  "properties": {
+    "schema": {"const": "sphere-world/v1"},
+    "world_id": {"type": "string", "minLength": 1},
+    "seed": {"type": "integer", "minimum": 0},
+    "radius_m": {"type": "number", "exclusiveMinimum": 0},
+    "topology": {"$ref": "#/$defs/topology"},
+    "lod": {"$ref": "#/$defs/lod"},
+    "layers": {"type": "array", "items": {"$ref": "#/$defs/layer"}},
+    "anchors": {"type": "array", "items": {"$ref": "#/$defs/anchor"}},
+    "structures": {"type": "array", "items": {"$ref": "#/$defs/structure"}},
+    "derived_outputs": {"$ref": "#/$defs/outputs"}
+  },
+  "$defs": {
+    "topology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "projection", "max_level", "patch_resolution"],
+      "properties": {
+        "kind": {"const": "cube_sphere"},
+        "projection": {"const": "normalized_cube"},
+        "max_level": {"type": "integer", "minimum": 0, "maximum": 24},
+        "patch_resolution": {"type": "integer", "minimum": 3}
+      }
+    },
+    "lod": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_neighbor_level_delta", "use_edge_skirts"],
+      "properties": {
+        "max_neighbor_level_delta": {"type": "integer", "minimum": 0, "maximum": 1},
+        "use_edge_skirts": {"type": "boolean"}
+      }
+    },
+    "layer": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "amplitude_m", "frequency", "seed_offset"],
+          "properties": {
+            "kind": {"const": "radial_noise"},
+            "id": {"type": "string", "minLength": 1},
+            "amplitude_m": {"type": "number"},
+            "frequency": {"type": "number", "exclusiveMinimum": 0},
+            "seed_offset": {"type": "integer", "minimum": 0}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "min_degrees", "max_degrees", "behavior"],
+          "properties": {
+            "kind": {"const": "latitude_band"},
+            "id": {"type": "string", "minLength": 1},
+            "min_degrees": {"type": "number", "minimum": -90, "maximum": 90},
+            "max_degrees": {"type": "number", "minimum": -90, "maximum": 90},
+            "behavior": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    },
+    "anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "face", "level", "u", "v", "altitude_m", "heading_degrees", "pitch_degrees"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"type": "string", "minLength": 1},
+        "face": {"enum": ["pos_x", "neg_x", "pos_y", "neg_y", "pos_z", "neg_z"]},
+        "level": {"type": "integer", "minimum": 0},
+        "u": {"type": "number", "minimum": 0, "maximum": 1},
+        "v": {"type": "number", "minimum": 0, "maximum": 1},
+        "altitude_m": {"type": "number"},
+        "heading_degrees": {"type": "number"},
+        "pitch_degrees": {"type": "number"}
+      }
+    },
+    "structure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "face", "level", "u", "v", "width_m", "depth_m", "heading_degrees"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "face": {"enum": ["pos_x", "neg_x", "pos_y", "neg_y", "pos_z", "neg_z"]},
+        "level": {"type": "integer", "minimum": 0},
+        "u": {"type": "number", "minimum": 0, "maximum": 1},
+        "v": {"type": "number", "minimum": 0, "maximum": 1},
+        "width_m": {"type": "number", "exclusiveMinimum": 0},
+        "depth_m": {"type": "number", "exclusiveMinimum": 0},
+        "heading_degrees": {"type": "number"}
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["render_mesh", "wireframe", "collision_mesh"],
+      "properties": {
+        "render_mesh": {"type": "boolean"},
+        "wireframe": {"type": "boolean"},
+        "collision_mesh": {"type": "boolean"}
+      }
+    }
+  }
+}

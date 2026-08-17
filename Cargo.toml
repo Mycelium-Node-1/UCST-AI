@@ -3,6 +3,8 @@ resolver = "2"
 members = [
     "crates/hdge-schema",
     "crates/hdge-core",
+    "crates/sphere-world-schema",
+    "crates/sphere-world-core",
     "apps/hdge-studio",
 ]
 

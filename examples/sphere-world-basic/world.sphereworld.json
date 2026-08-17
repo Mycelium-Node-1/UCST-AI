@@ -1,0 +1,62 @@
+{
+  "schema": "sphere-world/v1",
+  "world_id": "sphere-world-basic",
+  "seed": 42,
+  "radius_m": 1000.0,
+  "topology": {
+    "kind": "cube_sphere",
+    "projection": "normalized_cube",
+    "max_level": 4,
+    "patch_resolution": 33
+  },
+  "lod": {
+    "max_neighbor_level_delta": 1,
+    "use_edge_skirts": true
+  },
+  "layers": [
+    {
+      "kind": "radial_noise",
+      "id": "base-relief",
+      "amplitude_m": 35.0,
+      "frequency": 0.004,
+      "seed_offset": 0
+    },
+    {
+      "kind": "latitude_band",
+      "id": "polar-boundary",
+      "min_degrees": 70.0,
+      "max_degrees": 90.0,
+      "behavior": "blocked"
+    }
+  ],
+  "anchors": [
+    {
+      "id": "player-start",
+      "kind": "camera_observer",
+      "face": "pos_z",
+      "level": 0,
+      "u": 0.5,
+      "v": 0.5,
+      "altitude_m": 2.0,
+      "heading_degrees": 0.0,
+      "pitch_degrees": -10.0
+    }
+  ],
+  "structures": [
+    {
+      "id": "observation-platform",
+      "face": "pos_z",
+      "level": 0,
+      "u": 0.62,
+      "v": 0.50,
+      "width_m": 12.0,
+      "depth_m": 8.0,
+      "heading_degrees": 15.0
+    }
+  ],
+  "derived_outputs": {
+    "render_mesh": true,
+    "wireframe": true,
+    "collision_mesh": true
+  }
+}
