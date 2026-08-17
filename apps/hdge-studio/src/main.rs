@@ -2,6 +2,9 @@ use eframe::egui::{self, Color32, RichText, Stroke};
 use hdge_core::{compile_fgl, execute_tdm, sample_scene, Compilation};
 use hdge_schema::{canonical_json, PrimitiveKind, TdmRun, Vec3};
 
+mod sphere_world_lab;
+use sphere_world_lab::SphereWorldLab;
+
 const SAMPLE_SOURCE: &str = "☉⊗∆⚘∎";
 
 struct StudioApp {
@@ -12,6 +15,8 @@ struct StudioApp {
     scene_json: String,
     error: Option<String>,
     selected_debug: DebugView,
+    selected_workspace: Workspace,
+    sphere_world_lab: SphereWorldLab,
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -19,6 +24,12 @@ enum DebugView {
     World,
     Distance,
     Validation,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Workspace {
+    Fgl,
+    SphereWorld,
 }
 
 impl Default for StudioApp {
@@ -31,6 +42,8 @@ impl Default for StudioApp {
             scene_json: String::new(),
             error: None,
             selected_debug: DebugView::World,
+            selected_workspace: Workspace::Fgl,
+            sphere_world_lab: SphereWorldLab::default(),
         };
         app.compile_and_run();
         app
@@ -202,27 +215,46 @@ impl eframe::App for StudioApp {
             ui.horizontal(|ui| {
                 ui.heading(RichText::new("HDGE Studio").color(Color32::from_rgb(133, 206, 255)));
                 ui.separator();
-                if ui.button("Compile + run TDM").clicked() {
-                    self.compile_and_run();
-                }
-                if ui.button("Reset sample").clicked() {
-                    self.reset_fixture();
-                }
-                ui.separator();
-                ui.label("View:");
-                ui.selectable_value(&mut self.selected_debug, DebugView::World, "World");
+                ui.label("Workspace:");
                 ui.selectable_value(
-                    &mut self.selected_debug,
-                    DebugView::Distance,
-                    "Distance probe",
+                    &mut self.selected_workspace,
+                    Workspace::Fgl,
+                    "FGL Workbench",
                 );
                 ui.selectable_value(
-                    &mut self.selected_debug,
-                    DebugView::Validation,
-                    "Validation",
+                    &mut self.selected_workspace,
+                    Workspace::SphereWorld,
+                    "SphereWorld Lab",
                 );
+                if self.selected_workspace == Workspace::Fgl {
+                    ui.separator();
+                    if ui.button("Compile + run TDM").clicked() {
+                        self.compile_and_run();
+                    }
+                    if ui.button("Reset sample").clicked() {
+                        self.reset_fixture();
+                    }
+                    ui.separator();
+                    ui.label("View:");
+                    ui.selectable_value(&mut self.selected_debug, DebugView::World, "World");
+                    ui.selectable_value(
+                        &mut self.selected_debug,
+                        DebugView::Distance,
+                        "Distance probe",
+                    );
+                    ui.selectable_value(
+                        &mut self.selected_debug,
+                        DebugView::Validation,
+                        "Validation",
+                    );
+                }
             });
         });
+
+        if self.selected_workspace == Workspace::SphereWorld {
+            self.sphere_world_lab.ui(ctx);
+            return;
+        }
 
         egui::SidePanel::left("source").resizable(true).default_width(280.0).show(ctx, |ui| {
             ui.heading("Declarative source");

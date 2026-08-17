@@ -1042,6 +1042,8 @@ dependencies = [
  "hdge-core",
  "hdge-schema",
  "serde_json",
+ "sphere-world-core",
+ "sphere-world-schema",
 ]
 
 [[package]]

@@ -10,4 +10,6 @@ description = "A native declarative SDF world authoring and validation workbench
 eframe.workspace = true
 hdge-core = { path = "../../crates/hdge-core" }
 hdge-schema = { path = "../../crates/hdge-schema" }
+sphere-world-core = { path = "../../crates/sphere-world-core" }
+sphere-world-schema = { path = "../../crates/sphere-world-schema" }
 serde_json.workspace = true
