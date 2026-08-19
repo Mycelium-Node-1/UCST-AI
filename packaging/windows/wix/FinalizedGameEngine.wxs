@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Finalized Game Engine 0.1.0 x64 MSI
+  This installer packages runtime files only. The canonical SphereWorld manifest
+  remains data; generated mesh and GPU artifacts are never installer payload.
+-->
+<Wix xmlns="http://wixtoolset.org/schem../staging/wxs">
+  <Package
+      Id="FinalizedGameEngine"
+      Name="Finalized Game Engine"
+      Manufacturer="Schoff Research Program"
+      Version="0.1.0"
+      UpgradeCode="A4A532BF-5D8F-49E9-A7AA-1E802EFC56BC"
+      Language="1033"
+      Scope="perMachine"
+      InstallerVersion="500">
+
+    <MajorUpgrade
+        DowngradeErrorMessage="A newer version of Finalized Game Engine is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="INSTALLFOLDER" Name="Finalized Game Engine">
+        <Directory Id="WORLDSFOLDER" Name="worlds" />
+        <Directory Id="DOCSFOLDER" Name="docs" />
+        <Directory Id="CONFIGFOLDER" Name="config" />
+        <Directory Id="LICENSESFOLDER" Name="licenses" />
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ProgramMenuVendorFolder" Name="Schoff Research Program">
+        <Directory Id="ProgramMenuFinalizedGameEngineFolder" Name="Finalized Game Engine" />
+      </Directory>
+    </StandardDirectory>
+
+    <Feature Id="Complete" Title="Finalized Game Engine" Level="1" ConfigurableDirectory="INSTALLFOLDER">
+      <ComponentRef Id="EngineExecutable" />
+      <ComponentRef Id="CanonicalWorld" />
+      <ComponentRef Id="PackageReadme" />
+      <ComponentRef Id="PackageVersion" />
+      <ComponentRef Id="PackageChecksums" />
+      <ComponentRef Id="PackageConfiguration" />
+      <ComponentRef Id="LicenseNotice" />
+      <ComponentRef Id="HdgeStudioGuide" />
+      <ComponentRef Id="SphereWorldLabGuide" />
+      <ComponentRef Id="SphereWorldSliceGuide" />
+      <ComponentRef Id="ArchitectureBlueprint" />
+      <ComponentRef Id="Mm3eRoadmap" />
+    </Feature>
+
+    <Component Id="EngineExecutable" Directory="INSTALLFOLDER" Bitness="always64" Guid="*">
+      <File Id="FinalizedGameEngineExe" Source="../staging/bin/windows/Finalized-Game-Engine.exe" KeyPath="yes">
+        <Shortcut
+            Id="FinalizedGameEngineStartMenuShortcut"
+            Directory="ProgramMenuFinalizedGameEngineFolder"
+            Name="Finalized Game Engine"
+            Description="Open HDGE Studio and SphereWorld Lab"
+            WorkingDirectory="INSTALLFOLDER"
+            Advertise="no" />
+      </File>
+      <RemoveFolder Id="RemoveProgramMenuFinalizedGameEngineFolder" Directory="ProgramMenuFinalizedGameEngineFolder" On="uninstall" />
+      <RemoveFolder Id="RemoveProgramMenuVendorFolder" Directory="ProgramMenuVendorFolder" On="uninstall" />
+    </Component>
+
+    <Component Id="CanonicalWorld" Directory="WORLDSFOLDER" Bitness="always64" Guid="*">
+      <File Id="CanonicalWorldManifest" Source="../staging/worlds/sphere-world-basic.sphereworld.json" KeyPath="yes" />
+    </Component>
+
+    <Component Id="PackageReadme" Directory="INSTALLFOLDER" Bitness="always64" Guid="*">
+      <File Id="ReadmeMarkdown" Source="../staging/README.md" KeyPath="yes" />
+    </Component>
+
+    <Component Id="PackageVersion" Directory="INSTALLFOLDER" Bitness="always64" Guid="*">
+      <File Id="VersionMetadata" Source="../staging/VERSION" KeyPath="yes" />
+    </Component>
+
+    <Component Id="PackageChecksums" Directory="INSTALLFOLDER" Bitness="always64" Guid="*">
+      <File Id="PackageChecksumsFile" Source="../staging/SHA256SUMS.txt" KeyPath="yes" />
+    </Component>
+
+    <Component Id="PackageConfiguration" Directory="CONFIGFOLDER" Bitness="always64" Guid="*">
+      <File Id="PackageConfigurationJson" Source="../staging/config/package.json" KeyPath="yes" />
+    </Component>
+
+    <Component Id="LicenseNotice" Directory="LICENSESFOLDER" Bitness="always64" Guid="*">
+      <File Id="MitLicense" Source="../staging/licenses/LICENSE-MIT.txt" KeyPath="yes" />
+    </Component>
+
+    <Component Id="HdgeStudioGuide" Directory="DOCSFOLDER" Bitness="always64" Guid="*">
+      <File Id="HdgeStudioGuideFile" Source="../staging/docs/HDGE-Studio-Guide.md" KeyPath="yes" />
+    </Component>
+
+    <Component Id="SphereWorldLabGuide" Directory="DOCSFOLDER" Bitness="always64" Guid="*">
+      <File Id="SphereWorldLabGuideFile" Source="../staging/docs/SphereWorld-Lab-Guide.md" KeyPath="yes" />
+    </Component>
+
+    <Component Id="SphereWorldSliceGuide" Directory="DOCSFOLDER" Bitness="always64" Guid="*">
+      <File Id="SphereWorldSliceGuideFile" Source="../staging/docs/SphereWorld-Slice-0.md" KeyPath="yes" />
+    </Component>
+
+    <Component Id="ArchitectureBlueprint" Directory="DOCSFOLDER" Bitness="always64" Guid="*">
+      <File Id="ArchitectureBlueprintFile" Source="../staging/docs/HDGE-Architecture-Blueprint.md" KeyPath="yes" />
+    </Component>
+
+    <Component Id="Mm3eRoadmap" Directory="DOCSFOLDER" Bitness="always64" Guid="*">
+      <File Id="Mm3eRoadmapFile" Source="../staging/docs/MM3E-Backend-Roadmap.md" KeyPath="yes" />
+    </Component>
+  </Package>
+</Wix>

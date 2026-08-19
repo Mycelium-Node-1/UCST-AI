@@ -4,3 +4,7 @@ __pycache__/
 
 # Rust build artifacts
 target/
+
+# Locally generated Windows installer staging and output
+packaging/windows/staging/
+packaging/windows/output/

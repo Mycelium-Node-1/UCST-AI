@@ -1,0 +1,7 @@
+<Project Sdk="WixToolset.Sdk/6.0.0">
+  <PropertyGroup>
+    <OutputName>Finalized-Game-Engine-0.1.0-x64</OutputName>
+    <OutputType>Package</OutputType>
+    <InstallerPlatform>x64</InstallerPlatform>
+  </PropertyGroup>
+</Project>

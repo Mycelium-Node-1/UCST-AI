@@ -1,0 +1,10 @@
+{
+  "package_name": "Finalized Game Engine",
+  "application": "HDGE Studio",
+  "version": "0.1.0",
+  "engine_slice": "SphereWorld Slice 0",
+  "canonical_world_schema": "sphere-world/v1",
+  "default_world": "../worlds/sphere-world-basic.sphereworld.json",
+  "binary": "../Finalized-Game-Engine.exe",
+  "semantic_authority": "Validated SphereWorld manifest and CPU reference compiler; GPU visualization is derived diagnostics only."
+}
